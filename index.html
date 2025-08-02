@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>📋 أداة استخراج بيانات فيديو يوتيوب</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .fade-out {
+      animation: fadeOut 2s forwards;
+    }
+    @keyframes fadeOut {
+      0% { opacity: 1; }
+      100% { opacity: 0; visibility: hidden; }
+    }
+  </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
+  <div class="w-full max-w-2xl bg-white p-6 rounded-xl shadow-lg">
+    <h1 class="text-2xl font-bold mb-4 text-center">📋 أداة استخراج بيانات فيديو يوتيوب</h1>
+    
+    <div class="mb-4">
+      <input id="videoUrl" type="text" placeholder="أدخل رابط فيديو يوتيوب" class="w-full p-2 border rounded" />
+    </div>
+    <button onclick="getVideoData()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded mb-6">جلب المعلومات</button>
+
+    <div id="result" class="space-y-6 hidden">
+      <div>
+        <strong>📌 العنوان:</strong>
+        <p id="title" class="break-words w-full mb-2"></p>
+        <div class="flex gap-2">
+          <button onclick="copyText('title')" class="bg-green-500 text-white px-3 py-1 rounded">نسخ</button>
+          <button onclick="downloadText('title', 'العنوان')" class="bg-purple-600 text-white px-3 py-1 rounded">تحميل</button>
+        </div>
+      </div>
+
+      <div>
+        <strong>📝 الوصف:</strong>
+        <p id="description" class="break-words w-full whitespace-pre-wrap mb-2"></p>
+        <div class="flex gap-2">
+          <button onclick="copyText('description')" class="bg-green-500 text-white px-3 py-1 rounded">نسخ</button>
+          <button onclick="downloadText('description', 'الوصف')" class="bg-purple-600 text-white px-3 py-1 rounded">تحميل</button>
+        </div>
+      </div>
+
+      <div>
+        <strong>🏷️ التاغات:</strong>
+        <p id="tags" class="break-words w-full mb-2"></p>
+        <div class="flex gap-2">
+          <button onclick="copyText('tags')" class="bg-green-500 text-white px-3 py-1 rounded">نسخ</button>
+          <button onclick="downloadText('tags', 'التاغات')" class="bg-purple-600 text-white px-3 py-1 rounded">تحميل</button>
+        </div>
+      </div>
+
+      <div>
+        <strong>📂 الفئة:</strong>
+        <p id="category"></p>
+      </div>
+
+      <div>
+        <strong>📸 الصورة المصغرة:</strong>
+        <div class="flex flex-col gap-2">
+          <img id="thumbnail" src="" alt="صورة مصغرة" class="w-full max-w-xs rounded" />
+          <button id="downloadImageBtn" class="bg-purple-600 text-white px-3 py-1 rounded w-fit">تحميل</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="alert" class="fixed top-5 left-1/2 transform -translate-x-1/2 bg-green-500 text-white px-4 py-2 rounded shadow-lg hidden"></div>
+  </div>
+
+  <script>
+    const apiKey = 'AIzaSyDMWWYjIpIYo6nCHTZjG_53wHJHBBO__2s';
+
+    async function getCategories() {
+      const res = await fetch(`https://www.googleapis.com/youtube/v3/videoCategories?part=snippet&regionCode=US&key=${apiKey}`);
+      const data = await res.json();
+      const map = {};
+      data.items.forEach(cat => {
+        map[cat.id] = cat.snippet.title;
+      });
+      return map;
+    }
+
+    function showAlert(msg) {
+      const alert = document.getElementById('alert');
+      alert.textContent = msg;
+      alert.classList.remove('hidden', 'fade-out');
+      setTimeout(() => alert.classList.add('fade-out'), 2000);
+      document.addEventListener('click', () => alert.classList.add('fade-out'), { once: true });
+    }
+
+    function copyText(id) {
+      const el = document.getElementById(id);
+      navigator.clipboard.writeText(el.textContent).then(() =>
+        showAlert(`✅ تم نسخ ${id === 'tags' ? 'التاغات' : id === 'description' ? 'الوصف' : 'العنوان'}`)
+      ).catch(() => alert('فشل النسخ'));
+    }
+
+    function downloadText(id, label) {
+      const el = document.getElementById(id);
+      const text = el.textContent;
+      const titleSafe = document.getElementById('title').textContent.replace(/[\\/:*?"<>|]/g, '') || 'video';
+      const filename = `${label} - ${titleSafe}.txt`;
+
+      const BOM = new Uint8Array([0xEF, 0xBB, 0xBF]);
+      const encoder = new TextEncoder();
+      const encodedText = encoder.encode(text);
+
+      const blob = new Blob([BOM, encodedText], { type: 'text/plain;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+    }
+
+    async function getVideoData() {
+      const input = document.getElementById('videoUrl').value.trim();
+      const match = input.match(/(?:v=|\/shorts\/|\.be\/)([\w-]{11})/);
+      if (!match) return alert('رابط غير صالح');
+      const videoId = match[1];
+
+      const categoriesMap = await getCategories();
+
+      const res = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${apiKey}`);
+      const data = await res.json();
+      const snippet = data.items[0]?.snippet;
+      if (!snippet) return alert('فيديو غير موجود');
+
+      document.getElementById('title').textContent = snippet.title;
+      document.getElementById('description').textContent = snippet.description || 'لا يوجد وصف لهذا الفيديو';
+      document.getElementById('tags').textContent = snippet.tags?.join(', ') || 'لا توجد تاغات';
+      document.getElementById('category').textContent = categoriesMap[snippet.categoryId] || 'غير معروف';
+
+      const thumb = snippet.thumbnails.maxres?.url || snippet.thumbnails.standard?.url || snippet.thumbnails.high?.url || snippet.thumbnails.default?.url;
+      const titleSafe = snippet.title.replace(/[\\/:*?"<>|]/g, '');
+      document.getElementById('thumbnail').src = thumb;
+
+      document.getElementById('downloadImageBtn').onclick = () => {
+        fetch(thumb)
+          .then(response => response.blob())
+          .then(blob => {
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `${titleSafe}.jpg`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+          }).catch(() => alert('فشل تحميل الصورة'));
+      };
+
+      document.getElementById('result').classList.remove('hidden');
+    }
+  </script>
+</body>
+</html>
