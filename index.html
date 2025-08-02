@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>📋 أداة استخراج بيانات فيديو يوتيوب</title>
+  <title>馃搵 兀丿丕丞 丕爻鬲禺乇丕噩 亘賷丕賳丕鬲 賮賷丿賷賵 賷賵鬲賷賵亘</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .fade-out {
@@ -17,51 +17,51 @@
 </head>
 <body class="bg-gray-100 min-h-screen flex items-center justify-center p-4">
   <div class="w-full max-w-2xl bg-white p-6 rounded-xl shadow-lg">
-    <h1 class="text-2xl font-bold mb-4 text-center">📋 أداة استخراج بيانات فيديو يوتيوب</h1>
+    <h1 class="text-2xl font-bold mb-4 text-center">馃搵 兀丿丕丞 丕爻鬲禺乇丕噩 亘賷丕賳丕鬲 賮賷丿賷賵 賷賵鬲賷賵亘</h1>
     
     <div class="mb-4">
-      <input id="videoUrl" type="text" placeholder="أدخل رابط فيديو يوتيوب" class="w-full p-2 border rounded" />
+      <input id="videoUrl" type="text" placeholder="兀丿禺賱 乇丕亘胤 賮賷丿賷賵 賷賵鬲賷賵亘" class="w-full p-2 border rounded" />
     </div>
-    <button onclick="getVideoData()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded mb-6">جلب المعلومات</button>
+    <button onclick="getVideoData()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded mb-6">噩賱亘 丕賱賲毓賱賵賲丕鬲</button>
 
     <div id="result" class="space-y-6 hidden">
       <div>
-        <strong>📌 العنوان:</strong>
+        <strong>馃搶 丕賱毓賳賵丕賳:</strong>
         <p id="title" class="break-words w-full mb-2"></p>
         <div class="flex gap-2">
-          <button onclick="copyText('title')" class="bg-green-500 text-white px-3 py-1 rounded">نسخ</button>
-          <button onclick="downloadText('title', 'العنوان')" class="bg-purple-600 text-white px-3 py-1 rounded">تحميل</button>
+          <button onclick="copyText('title')" class="bg-green-500 text-white px-3 py-1 rounded">賳爻禺</button>
+          <button onclick="downloadText('title', '丕賱毓賳賵丕賳')" class="bg-purple-600 text-white px-3 py-1 rounded">鬲丨賲賷賱</button>
         </div>
       </div>
 
       <div>
-        <strong>📝 الوصف:</strong>
+        <strong>馃摑 丕賱賵氐賮:</strong>
         <p id="description" class="break-words w-full whitespace-pre-wrap mb-2"></p>
         <div class="flex gap-2">
-          <button onclick="copyText('description')" class="bg-green-500 text-white px-3 py-1 rounded">نسخ</button>
-          <button onclick="downloadText('description', 'الوصف')" class="bg-purple-600 text-white px-3 py-1 rounded">تحميل</button>
+          <button onclick="copyText('description')" class="bg-green-500 text-white px-3 py-1 rounded">賳爻禺</button>
+          <button onclick="downloadText('description', '丕賱賵氐賮')" class="bg-purple-600 text-white px-3 py-1 rounded">鬲丨賲賷賱</button>
         </div>
       </div>
 
       <div>
-        <strong>🏷️ التاغات:</strong>
+        <strong>馃彿锔� 丕賱鬲丕睾丕鬲:</strong>
         <p id="tags" class="break-words w-full mb-2"></p>
         <div class="flex gap-2">
-          <button onclick="copyText('tags')" class="bg-green-500 text-white px-3 py-1 rounded">نسخ</button>
-          <button onclick="downloadText('tags', 'التاغات')" class="bg-purple-600 text-white px-3 py-1 rounded">تحميل</button>
+          <button onclick="copyText('tags')" class="bg-green-500 text-white px-3 py-1 rounded">賳爻禺</button>
+          <button onclick="downloadText('tags', '丕賱鬲丕睾丕鬲')" class="bg-purple-600 text-white px-3 py-1 rounded">鬲丨賲賷賱</button>
         </div>
       </div>
 
       <div>
-        <strong>📂 الفئة:</strong>
+        <strong>馃搨 丕賱賮卅丞:</strong>
         <p id="category"></p>
       </div>
 
       <div>
-        <strong>📸 الصورة المصغرة:</strong>
+        <strong>馃摳 丕賱氐賵乇丞 丕賱賲氐睾乇丞:</strong>
         <div class="flex flex-col gap-2">
-          <img id="thumbnail" src="" alt="صورة مصغرة" class="w-full max-w-xs rounded" />
-          <button id="downloadImageBtn" class="bg-purple-600 text-white px-3 py-1 rounded w-fit">تحميل</button>
+          <img id="thumbnail" src="" alt="氐賵乇丞 賲氐睾乇丞" class="w-full max-w-xs rounded" />
+          <button id="downloadImageBtn" class="bg-purple-600 text-white px-3 py-1 rounded w-fit">鬲丨賲賷賱</button>
         </div>
       </div>
     </div>
@@ -93,8 +93,8 @@
     function copyText(id) {
       const el = document.getElementById(id);
       navigator.clipboard.writeText(el.textContent).then(() =>
-        showAlert(`✅ تم نسخ ${id === 'tags' ? 'التاغات' : id === 'description' ? 'الوصف' : 'العنوان'}`)
-      ).catch(() => alert('فشل النسخ'));
+        showAlert(`鉁� 鬲賲 賳爻禺 ${id === 'tags' ? '丕賱鬲丕睾丕鬲' : id === 'description' ? '丕賱賵氐賮' : '丕賱毓賳賵丕賳'}`)
+      ).catch(() => alert('賮卮賱 丕賱賳爻禺'));
     }
 
     function downloadText(id, label) {
@@ -119,7 +119,7 @@
     async function getVideoData() {
       const input = document.getElementById('videoUrl').value.trim();
       const match = input.match(/(?:v=|\/shorts\/|\.be\/)([\w-]{11})/);
-      if (!match) return alert('رابط غير صالح');
+      if (!match) return alert('乇丕亘胤 睾賷乇 氐丕賱丨');
       const videoId = match[1];
 
       const categoriesMap = await getCategories();
@@ -127,12 +127,12 @@
       const res = await fetch(`https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${apiKey}`);
       const data = await res.json();
       const snippet = data.items[0]?.snippet;
-      if (!snippet) return alert('فيديو غير موجود');
+      if (!snippet) return alert('賮賷丿賷賵 睾賷乇 賲賵噩賵丿');
 
       document.getElementById('title').textContent = snippet.title;
-      document.getElementById('description').textContent = snippet.description || 'لا يوجد وصف لهذا الفيديو';
-      document.getElementById('tags').textContent = snippet.tags?.join(', ') || 'لا توجد تاغات';
-      document.getElementById('category').textContent = categoriesMap[snippet.categoryId] || 'غير معروف';
+      document.getElementById('description').textContent = snippet.description || '賱丕 賷賵噩丿 賵氐賮 賱賴匕丕 丕賱賮賷丿賷賵';
+      document.getElementById('tags').textContent = snippet.tags?.join(', ') || '賱丕 鬲賵噩丿 鬲丕睾丕鬲';
+      document.getElementById('category').textContent = categoriesMap[snippet.categoryId] || '睾賷乇 賲毓乇賵賮';
 
       const thumb = snippet.thumbnails.maxres?.url || snippet.thumbnails.standard?.url || snippet.thumbnails.high?.url || snippet.thumbnails.default?.url;
       const titleSafe = snippet.title.replace(/[\\/:*?"<>|]/g, '');
@@ -148,7 +148,7 @@
             document.body.appendChild(a);
             a.click();
             a.remove();
-          }).catch(() => alert('فشل تحميل الصورة'));
+          }).catch(() => alert('賮卮賱 鬲丨賲賷賱 丕賱氐賵乇丞'));
       };
 
       document.getElementById('result').classList.remove('hidden');
